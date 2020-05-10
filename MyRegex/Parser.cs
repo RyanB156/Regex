@@ -11,6 +11,9 @@ namespace MyRegex
     public static class Parsers
     {
 
+        /// <summary>
+        /// Parse any one character from the input stream.
+        /// </summary>
         public static Parser AnyChar = input =>
         {
             if (null == input | input.IsEmpty())
@@ -18,6 +21,9 @@ namespace MyRegex
             else return new Success(input.Head.ToString(), input.Advance(1));
         };
 
+        /// <summary>
+        /// Parse a letter from the input stream.
+        /// </summary>
         public static Parser Letter = input =>
         {
             if (null == input | input.IsEmpty())
@@ -28,6 +34,9 @@ namespace MyRegex
                 return new Failure();
         };
 
+        /// <summary>
+        /// Parse a digit from the input stream.
+        /// </summary>
         public static Parser Digit = input =>
         {
             if (null == input | input.IsEmpty())
@@ -38,6 +47,9 @@ namespace MyRegex
                 return new Failure();
         };
 
+        /// <summary>
+        /// Parse the specified character from the input stream.
+        /// </summary>
         public static Func<char, Parser> PChar = c => input =>
         {
             if (null == input | input.IsEmpty())
@@ -48,6 +60,9 @@ namespace MyRegex
                 return new Failure();
         };
 
+        /// <summary>
+        /// Parse anything but the specified character.
+        /// </summary>
         public static Func<char, Parser> NotChar => c => input =>
         {
             if (null == input || !input.HasNext())
@@ -58,6 +73,11 @@ namespace MyRegex
                 return new Failure();
         };
 
+        /// <summary>
+        /// Parse any character that is not in the specified list.
+        /// </summary>
+        /// <param name="cs"></param>
+        /// <returns></returns>
         public static Parser NotChars(List<char> cs) => input =>
         {
             if (cs.Contains(input.Head))
@@ -66,6 +86,9 @@ namespace MyRegex
                 return new Success(input.Head.ToString(), input.Advance(1));
         };
 
+        /// <summary>
+        /// Parse whitespace characters from the input stream.
+        /// </summary>
         public static Parser WhiteSpace = input =>
         {
             if (null == input | input.IsEmpty())
@@ -76,6 +99,12 @@ namespace MyRegex
                 return new Failure();
         };
 
+        /// <summary>
+        /// Parser combinator that applies the first parser then the second one if the first parser succeeds.
+        /// </summary>
+        /// <param name="parser1">The first parser to apply.</param>
+        /// <param name="parser2">The second parser to apply.</param>
+        /// <returns>A parser that applies two parsers one after the other and returns a success or failure result.</returns>
         public static Parser Then(this Parser parser1, Parser parser2) => input =>
         {
             var res1 = parser1(input);
@@ -149,6 +178,11 @@ namespace MyRegex
                 return lastResult;
         };
 
+        /// <summary>
+        /// Create a parser by chaining the specified parsers together.
+        /// </summary>
+        /// <param name="parsers"></param>
+        /// <returns></returns>
         public static Parser ConcatParsers(List<Parser> parsers)
         {
             if (null == parsers | parsers.Count == 0)
@@ -159,7 +193,6 @@ namespace MyRegex
                 return parsers.Aggregate((p1, p2) => p1.Then(p2));
         }
 
-        
 
         public static Parser Optional(Parser parser) => input =>
         {
@@ -172,6 +205,12 @@ namespace MyRegex
             }
         };
 
+        /// <summary>
+        /// Applies either the first parser or the second parser.
+        /// </summary>
+        /// <param name="parser1"></param>
+        /// <param name="parser2"></param>
+        /// <returns></returns>
         public static Parser Or(Parser parser1, Parser parser2) => input =>
         {
             switch (parser1(input))
@@ -190,6 +229,7 @@ namespace MyRegex
             }
             return new Failure();
         };
+
 
         public static Parser Choice(List<Parser> parsers) => input =>
         {

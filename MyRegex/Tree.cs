@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace MyRegex
 {
+
+    /// <summary>
+    /// Create abstract syntax tree for a regex.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     abstract class Tree<T>
     {
         protected T Value { get; }
