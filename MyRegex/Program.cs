@@ -201,13 +201,8 @@ namespace MyRegex
             }
             else
             {
-                //TestBuildParser();
-
-                //TestRegex();
-                //TestQuantifiedMatch();
-                TestEmail();
-                //ParserStringTest();
-
+                Console.WriteLine("Expected 1 or 2 arguments");
+                return;
             }
 
 
